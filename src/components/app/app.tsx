@@ -17,14 +17,15 @@ import { AppHeader, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
 import ProtectedRoute from '../protected-route';
 import { fetchIngredients } from '../../services/slices/burgerIngredientsSlice';
-import { useDispatch } from '../../services/store';
+import { useAppDispatch } from '../../services/store';
 import { useEffect } from 'react';
 
 const App = () => {
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(fetchIngredients());
-  // }, [dispatch]);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+  }, [dispatch]);
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -33,6 +34,7 @@ const App = () => {
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderInfo />} />
         <Route
           path='/login'
           element={

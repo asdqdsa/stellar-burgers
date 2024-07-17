@@ -3,7 +3,7 @@ import { useInView } from 'react-intersection-observer';
 
 import { TIngredient, TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
-import { useSelector } from '../../services/store';
+import { useAppSelector } from '../../services/store';
 
 export const BurgerIngredients: FC = () => {
   /** TODO: взять переменные из стора */
@@ -24,18 +24,18 @@ export const BurgerIngredients: FC = () => {
   //   }
   // ] as (TIngredient & { __v: number })[];
   // const buns = [] as TIngredient[];
-  const buns: TIngredient[] = useSelector((state) =>
-    state.ingredients.ingredients.filter(
+  const buns: TIngredient[] = useAppSelector((globalState) =>
+    globalState.ingredientsSlice.ingredients.filter(
       (item: TIngredient) => item.type === 'bun'
     )
   );
-  const mains: TIngredient[] = useSelector((state) =>
-    state.ingredients.ingredients.filter(
+  const mains: TIngredient[] = useAppSelector((globalState) =>
+    globalState.ingredientsSlice.ingredients.filter(
       (item: TIngredient) => item.type === 'main'
     )
   );
-  const sauces: TIngredient[] = useSelector((state) =>
-    state.ingredients.ingredients.filter(
+  const sauces: TIngredient[] = useAppSelector((globalState) =>
+    globalState.ingredientsSlice.ingredients.filter(
       (item: TIngredient) => item.type === 'sauce'
     )
   );

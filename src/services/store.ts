@@ -7,9 +7,11 @@ import {
   useSelector as selectorHook
 } from 'react-redux';
 import ingredientsSlice from './slices/burgerIngredientsSlice';
+import feedSlice from './slices/feedSlice';
 
 const rootReducer = combineReducers({
-  ingredients: ingredientsSlice
+  ingredientsSlice: ingredientsSlice,
+  feedSlice: feedSlice
 }); // Заменить на импорт настоящего редьюсера
 
 const store = configureStore({
@@ -25,7 +27,7 @@ export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
-export const useDispatch: () => AppDispatch = () => dispatchHook();
-export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
+export const useAppDispatch: () => AppDispatch = () => dispatchHook();
+export const useAppSelector: TypedUseSelectorHook<RootState> = selectorHook;
 
 export default store;

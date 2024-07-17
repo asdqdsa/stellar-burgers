@@ -25,6 +25,15 @@ export type TIngredientState = {
   isLoading: boolean;
 };
 
+// https://norma.nomoreparties.space/api/ingredients
+// https://norma.nomoreparties.space/api/orders/all
+// https://norma.nomoreparties.space/api/ingredients
+// https://norma.nomoreparties.space/api/ingredients
+// https://norma.nomoreparties.space/api/ingredients
+//await fetch(
+//   'https://norma.nomoreparties.space/api/orders/all'
+// );
+
 const initialState: TIngredientState = {
   ingredients: [],
   error: null,
@@ -38,17 +47,17 @@ export const ingredientsSlice = createSlice({
   selectors: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchIngredients.pending, (state) => {
-        state.isLoading = true;
-        state.error = null;
+      .addCase(fetchIngredients.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
       })
-      .addCase(fetchIngredients.rejected, (state) => {
-        state.error = 'Error';
+      .addCase(fetchIngredients.rejected, (sliceState) => {
+        sliceState.error = 'Error';
       })
-      .addCase(fetchIngredients.fulfilled, (state, action) => {
-        state.ingredients = action.payload;
-        state.error = null;
-        state.isLoading = false;
+      .addCase(fetchIngredients.fulfilled, (slcieState, action) => {
+        slcieState.ingredients = action.payload;
+        slcieState.error = null;
+        slcieState.isLoading = false;
       });
   }
 });
