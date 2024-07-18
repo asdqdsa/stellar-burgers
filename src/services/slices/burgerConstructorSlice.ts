@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice, nanoid } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
 // export type TIngredient = {
@@ -37,15 +37,21 @@ const burgerConstructorSlice = createSlice({
   name: 'burgerConstructor',
   initialState,
   reducers: {
-    addIngredient(sliceState, action: PayloadAction<TConstructorIngredient>) {
-      switch (action.payload.type) {
-        case 'bun':
-          sliceState.constructorItems.bun = action.payload;
-          break;
-        default:
-          sliceState.constructorItems.ingredients.push(action.payload);
-      }
+    addIngredient: {
+      reducer: (sliceState, action: PayloadAction<TConstructorIngredient>) => {
+        console.log(action.payload);
+        switch (action.payload.type) {
+          case 'bun':
+            sliceState.constructorItems.bun = action.payload;
+            break;
+          default:
+            sliceState.constructorItems.ingredients.push(action.payload);
+        }
+      },
+
+      prepare: (ingredient) => ({ payload: { ...ingredient, id: nanoid() } })
     },
+
     removeIngredient(sliceState, action: PayloadAction<TIngredient>) {
       console.log(sliceState.constructorItems.ingredients, 'beofre filter');
       sliceState.constructorItems.ingredients =
@@ -58,6 +64,7 @@ const burgerConstructorSlice = createSlice({
         'after filter'
       );
     },
+
     moveIngredient(
       sliceState,
       action: PayloadAction<{ index: number; move: number }>
