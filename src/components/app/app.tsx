@@ -11,7 +11,7 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
 import { AppHeader, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
@@ -22,10 +22,14 @@ import { useEffect } from 'react';
 
 const App = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(fetchIngredients());
   }, [dispatch]);
+
+  const closeModal = () => navigate(-1);
+
   return (
     <div className={styles.app}>
       <AppHeader />
@@ -89,10 +93,7 @@ const App = () => {
         <Route
           path='/feed/:number'
           element={
-            <Modal
-              title='OrderInfo'
-              onClose={() => console.log('onCloseModalOrderInfo')}
-            >
+            <Modal title='OrderInfo' onClose={closeModal}>
               <OrderInfo />
             </Modal>
           }
