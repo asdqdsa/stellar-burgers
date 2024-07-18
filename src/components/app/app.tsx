@@ -13,7 +13,7 @@ import styles from './app.module.css';
 
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 
-import { AppHeader, Modal, OrderInfo } from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
 import ProtectedRoute from '../protected-route';
 import { fetchIngredients } from '../../services/slices/burgerIngredientsSlice';
@@ -105,11 +105,8 @@ const App = () => {
           path='/ingredients/:id'
           element={
             <ProtectedRoute>
-              <Modal
-                title='IngredientsDetails'
-                onClose={() => console.log('onCloseModalIngredientsDetails')}
-              >
-                <OrderInfo />
+              <Modal title='IngredientsDetails' onClose={closeModal}>
+                <IngredientDetails />
               </Modal>
             </ProtectedRoute>
           }
@@ -118,10 +115,7 @@ const App = () => {
         <Route
           path='/profile/orders/:number'
           element={
-            <Modal
-              title='IngredientsDetailsProtected'
-              onClose={() => console.log('onCloseModalOrderInfoProtected')}
-            >
+            <Modal title='IngredientsDetailsProtected' onClose={closeModal}>
               <OrderInfo />
             </Modal>
           }

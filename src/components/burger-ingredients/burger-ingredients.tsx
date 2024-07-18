@@ -40,6 +40,17 @@ export const BurgerIngredients: FC = () => {
     )
   );
 
+  // const proteins: TIngredient[] = useAppSelector((globalState) =>
+  //   globalState.ingredientsSlice.ingredients.toSorted(
+  //     (item2: TIngredient, item: TIngredient) => item.proteins - item2.proteins
+  //   )
+  // );
+  // console.log(proteins);
+  // const proteins = mains.toSorted(
+  //   (item2: TIngredient, item: TIngredient) => item.proteins - item2.proteins
+  // );
+  // console.log(proteins);
+
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
   const titleMainRef = useRef<HTMLHeadingElement>(null);
