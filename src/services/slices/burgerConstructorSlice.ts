@@ -39,7 +39,6 @@ const burgerConstructorSlice = createSlice({
   reducers: {
     addIngredient: {
       reducer: (sliceState, action: PayloadAction<TConstructorIngredient>) => {
-        console.log(action.payload);
         switch (action.payload.type) {
           case 'bun':
             sliceState.constructorItems.bun = action.payload;
@@ -52,17 +51,14 @@ const burgerConstructorSlice = createSlice({
       prepare: (ingredient) => ({ payload: { ...ingredient, id: nanoid() } })
     },
 
-    removeIngredient(sliceState, action: PayloadAction<TIngredient>) {
-      console.log(sliceState.constructorItems.ingredients, 'beofre filter');
+    removeIngredient(
+      sliceState,
+      action: PayloadAction<TConstructorIngredient>
+    ) {
       sliceState.constructorItems.ingredients =
         sliceState.constructorItems.ingredients.filter(
-          (item) => item._id !== action.payload._id
+          (item) => item.id !== action.payload.id
         );
-      console.log(
-        action.payload,
-        sliceState.constructorItems.ingredients,
-        'after filter'
-      );
     },
 
     moveIngredient(
