@@ -1,13 +1,17 @@
 import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   TAuthResponse,
+  TLoginData,
   TRegisterData,
+  TServerResponse,
   getUserApi,
+  loginUserApi,
+  logoutApi,
   registerUserApi
 } from '@api';
 import { TUserResponse } from '@api';
 import { TUser } from '@utils-types';
-import { setCookie } from '../../utils/cookie';
+import { deleteCookie, setCookie } from '../../utils/cookie';
 
 // export type TRegisterData = {
 //   email: string;
@@ -37,6 +41,17 @@ export const fetchUser = createAsyncThunk<
   { rejectValue: string }
 >('profile/fetchUser', async (): Promise<TUserResponse> => getUserApi());
 
+export const loginUser = createAsyncThunk<TAuthResponse, TLoginData>(
+  'profile/userLogin',
+  async (credentials: TLoginData): Promise<TAuthResponse> =>
+    loginUserApi(credentials)
+);
+
+export const logoutUser = createAsyncThunk<TServerResponse<{}>, undefined>(
+  'profile/userLogout',
+  async (): Promise<TServerResponse<{}>> => logoutApi()
+);
+
 export type TProfileState = {
   userData: TUser;
   error: null | string;
@@ -59,7 +74,9 @@ const profileSlice = createSlice({
   name: 'profile',
   initialState,
   reducers: {},
-  selectors: {},
+  selectors: {
+    getUserSelector: (sliceState) => sliceState.userData
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchRegisterUser.pending, (sliceState) => {
@@ -89,14 +106,41 @@ const profileSlice = createSlice({
         sliceState.error = 'Error';
       })
       .addCase(fetchUser.fulfilled, (sliceState, action) => {
+        sliceState.userData = action.payload.user;
         console.log(
           action.payload.success,
           'success?',
           action.payload.user,
           'user?'
         );
+      })
+      .addCase(loginUser.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(loginUser.rejected, (sliceState) => {
+        sliceState.error = 'Error login';
+      })
+      .addCase(loginUser.fulfilled, (sliceState, action) => {
+        sliceState.userData = action.payload.user;
+        sliceState.isLoading = false;
+      })
+      .addCase(logoutUser.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(logoutUser.rejected, (sliceState) => {
+        sliceState.error = 'Error login';
+      })
+      .addCase(logoutUser.fulfilled, (sliceState, action) => {
+        sliceState.isAuthorized = !action.payload.success;
+        sliceState.isLoading = false;
+        console.log('logout fullfilled');
+        localStorage.removeItem('refreshToken');
+        deleteCookie('accessToken');
       });
   }
 });
 
+export const { getUserSelector } = profileSlice.selectors;
 export default profileSlice.reducer;
