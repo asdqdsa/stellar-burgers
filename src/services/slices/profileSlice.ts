@@ -124,6 +124,13 @@ const profileSlice = createSlice({
       .addCase(loginUser.fulfilled, (sliceState, action) => {
         sliceState.userData = action.payload.user;
         sliceState.isLoading = false;
+        [sliceState.accessToken, sliceState.refreshToken] = [
+          action.payload.accessToken,
+          action.payload.refreshToken
+        ];
+        setCookie('accessToken', sliceState.accessToken);
+        localStorage.setItem('refreshToken', sliceState.refreshToken);
+        console.log(sliceState.accessToken);
       })
       .addCase(logoutUser.pending, (sliceState) => {
         sliceState.isLoading = true;

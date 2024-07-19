@@ -21,14 +21,14 @@ import { TConstructorIngredient, TIngredient } from '@utils-types';
 /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
 type TBurgerConstructorState = {
   constructorItems: {
-    bun: { price: number };
+    bun: null | TIngredient;
     ingredients: TConstructorIngredient[];
   };
 };
 
 const initialState: TBurgerConstructorState = {
   constructorItems: {
-    bun: { price: 0 },
+    bun: null,
     ingredients: []
   }
 };
