@@ -4,8 +4,8 @@ import { FC, SyntheticEvent, useEffect, useState } from 'react';
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */
   const user = {
-    name: '',
-    email: ''
+    name: 'Some nae',
+    email: 'emailll'
   };
 
   const [formValue, setFormValue] = useState({
@@ -20,7 +20,8 @@ export const Profile: FC = () => {
       name: user?.name || '',
       email: user?.email || ''
     }));
-  }, [user]);
+    // }, [user]);
+  }, []);
 
   const isFormChanged =
     formValue.name !== user?.name ||
