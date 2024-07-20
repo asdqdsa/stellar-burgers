@@ -1,24 +1,36 @@
-import { FC, useMemo } from 'react';
+import { FC, useEffect, useMemo } from 'react';
 import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchOrderBurger } from '../../services/slices/orderSlice';
+import { useNavigate } from 'react-router-dom';
+import { fetchUser } from '../../services/slices/profileSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const isAuthorized = useAppSelector(
+    (globalState) => globalState.profileSlice.isAuthorized
+  );
+  console.log(isAuthorized, 'user burg constr');
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
 
   const constructorItems = useAppSelector(
     (globalState) => globalState.burgerConstructorSlice.constructorItems
   );
 
+  useEffect(() => {
+    dispatch(fetchUser);
+  }, [dispatch]);
   const orderRequest = false;
 
   const orderModalData = null;
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;
+    console.log(isAuthorized);
+    if (!isAuthorized) navigate('/login');
     const ingredientsId: string[] = constructorItems.ingredients.map(
       (item) => item._id
     );

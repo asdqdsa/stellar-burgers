@@ -7,7 +7,8 @@ import {
   getUserApi,
   loginUserApi,
   logoutApi,
-  registerUserApi
+  registerUserApi,
+  updateUserApi
 } from '@api';
 import { TUserResponse } from '@api';
 import { TUser } from '@utils-types';
@@ -52,6 +53,15 @@ export const logoutUser = createAsyncThunk<TServerResponse<{}>, undefined>(
   async (): Promise<TServerResponse<{}>> => logoutApi()
 );
 
+export const userUpdate = createAsyncThunk<
+  TUserResponse,
+  Partial<TRegisterData>
+>(
+  'profile/useUpdate',
+  async (credentials: Partial<TRegisterData>): Promise<TUserResponse> =>
+    updateUserApi(credentials)
+);
+
 export type TProfileState = {
   userData: TUser;
   error: null | string;
@@ -75,7 +85,7 @@ const profileSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getUserSelector: (sliceState) => sliceState.userData
+    getUserSelector: (sliceState: TProfileState): TUser => sliceState.userData
   },
   extraReducers: (builder) => {
     builder
@@ -106,6 +116,7 @@ const profileSlice = createSlice({
         sliceState.error = 'Error';
       })
       .addCase(fetchUser.fulfilled, (sliceState, action) => {
+        sliceState.isLoading = false;
         sliceState.userData = action.payload.user;
         console.log(
           action.payload.success,
@@ -145,6 +156,18 @@ const profileSlice = createSlice({
         console.log('logout fullfilled');
         localStorage.removeItem('refreshToken');
         deleteCookie('accessToken');
+      })
+      .addCase(userUpdate.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(userUpdate.rejected, (sliceState) => {
+        sliceState.error = 'Error update user';
+      })
+      .addCase(userUpdate.fulfilled, (sliceState, action) => {
+        sliceState.isLoading = false;
+        sliceState.userData = action.payload.user;
+        console.log('userUdpate', action.payload.user);
       });
   }
 });

@@ -1,7 +1,12 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { fetchUser, getUserSelector } from '../../services/slices/profileSlice';
+import {
+  fetchUser,
+  getUserSelector,
+  userUpdate
+} from '../../services/slices/profileSlice';
 import { useAppDispatch, useAppSelector } from '../../services/store';
+import { useSelector } from 'react-redux';
 
 export const Profile: FC = () => {
   /** TODO: взять переменную из стора */
@@ -11,11 +16,14 @@ export const Profile: FC = () => {
   //   ),
   //   email: 'emailll'
   // };
-  const dispatch = useAppDispatch();
   const user = useAppSelector(
     (globalState) => globalState.profileSlice.userData
   );
+  const dispatch = useAppDispatch();
   console.log(user, 'userr');
+  const isLoaded = useAppSelector(
+    (globalState) => globalState.profileSlice.isLoading
+  );
 
   const [formValue, setFormValue] = useState({
     name: user.name,
@@ -25,13 +33,17 @@ export const Profile: FC = () => {
 
   useEffect(() => {
     dispatch(fetchUser());
-    setFormValue((prevState) => ({
-      ...prevState,
-      name: user?.name || '',
-      email: user?.email || ''
-    }));
-    // }, [user]);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      setFormValue((prevState) => ({
+        ...prevState,
+        name: user?.name || '',
+        email: user?.email || ''
+      }));
+    }
+  }, [user]);
 
   const isFormChanged =
     formValue.name !== user?.name ||
@@ -40,6 +52,8 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    console.log('save data profile', formValue);
+    dispatch(userUpdate(formValue));
   };
 
   const handleCancel = (e: SyntheticEvent) => {

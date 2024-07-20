@@ -12,16 +12,23 @@ export const fetchOrderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
   async (order: string[]): Promise<TNewOrderResponse> => orderBurgerApi(order)
 );
 
+export const fetchOrdersUser = createAsyncThunk<TOrder[], undefined>(
+  'order/fetchOrdersUser',
+  async (): Promise<TOrder[]> => getOrdersApi()
+);
+
 type TOrderState = {
   orderRequest: boolean;
   orderData: TOrder | null;
   error: null | string;
   isLoading: boolean;
+  ordersByUser: TOrder[];
 };
 
 const initialState: TOrderState = {
   orderRequest: false,
   orderData: null,
+  ordersByUser: [],
   error: null,
   isLoading: false
 };
@@ -45,6 +52,17 @@ const orderSlice = createSlice({
         sliceState.error = null;
         sliceState.orderRequest = true;
         sliceState.orderData = action.payload.order;
+      })
+      .addCase(fetchOrdersUser.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(fetchOrdersUser.rejected, (sliceState) => {
+        sliceState.error = 'Error order';
+      })
+      .addCase(fetchOrdersUser.fulfilled, (sliceState, action) => {
+        sliceState.isLoading = false;
+        sliceState.ordersByUser = action.payload;
       });
   }
 });
