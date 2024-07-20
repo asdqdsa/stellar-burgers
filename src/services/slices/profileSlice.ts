@@ -134,6 +134,7 @@ const profileSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (sliceState, action) => {
         sliceState.userData = action.payload.user;
+        sliceState.isAuthorized = true;
         sliceState.isLoading = false;
         [sliceState.accessToken, sliceState.refreshToken] = [
           action.payload.accessToken,
@@ -145,6 +146,7 @@ const profileSlice = createSlice({
       })
       .addCase(logoutUser.pending, (sliceState) => {
         sliceState.isLoading = true;
+        sliceState.isAuthorized = false;
         sliceState.error = null;
       })
       .addCase(logoutUser.rejected, (sliceState) => {
