@@ -2,7 +2,7 @@ import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import {
   fetchUser,
-  getUserSelector,
+  getUsername,
   userUpdate
 } from '../../services/slices/profileSlice';
 import { useAppDispatch, useAppSelector } from '../../services/store';
@@ -16,13 +16,11 @@ export const Profile: FC = () => {
   //   ),
   //   email: 'emailll'
   // };
-  const user = useAppSelector(
-    (globalState) => globalState.profileSlice.userData
-  );
+  const user = useAppSelector((globalState) => globalState.profile.userData);
   const dispatch = useAppDispatch();
   console.log(user, 'userr');
   const isLoaded = useAppSelector(
-    (globalState) => globalState.profileSlice.isLoading
+    (globalState) => globalState.profile.isLoading
   );
 
   const [formValue, setFormValue] = useState({

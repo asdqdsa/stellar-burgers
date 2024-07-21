@@ -5,6 +5,7 @@ import { TIngredient, TOrder } from '@utils-types';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchFeed } from '../../services/slices/feedSlice';
 import { useParams } from 'react-router-dom';
+import { removeItemsConstructor } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   /** TODO: взять переменные orderData и ingredients из стора */

@@ -4,10 +4,12 @@ import {
   TLoginData,
   TRegisterData,
   TServerResponse,
+  forgotPasswordApi,
   getUserApi,
   loginUserApi,
   logoutApi,
   registerUserApi,
+  resetPasswordApi,
   updateUserApi
 } from '@api';
 import { TUserResponse } from '@api';
@@ -57,9 +59,34 @@ export const userUpdate = createAsyncThunk<
   TUserResponse,
   Partial<TRegisterData>
 >(
-  'profile/useUpdate',
+  'profile/userUpdate',
   async (credentials: Partial<TRegisterData>): Promise<TUserResponse> =>
     updateUserApi(credentials)
+);
+
+export const recoverPassUser = createAsyncThunk<
+  { success: boolean },
+  { email: string },
+  { rejectValue: string }
+>(
+  'profile/userRecoverPas',
+  async ({ email }: { email: string }): Promise<{ success: boolean }> =>
+    forgotPasswordApi({ email })
+);
+
+export const resetPassUser = createAsyncThunk<
+  { success: boolean },
+  { password: string; token: string },
+  { rejectValue: string }
+>(
+  'profile/userResetPass',
+  async ({
+    password,
+    token
+  }: {
+    password: string;
+    token: string;
+  }): Promise<{ success: boolean }> => resetPasswordApi({ password, token })
 );
 
 export type TProfileState = {
@@ -85,7 +112,10 @@ const profileSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
-    getUserSelector: (sliceState: TProfileState): TUser => sliceState.userData
+    getUsername: (sliceState: TProfileState): string =>
+      sliceState.userData.name,
+    getAuthStatus: (sliceState: TProfileState): boolean =>
+      sliceState.isAuthorized
   },
   extraReducers: (builder) => {
     builder
@@ -170,9 +200,29 @@ const profileSlice = createSlice({
         sliceState.isLoading = false;
         sliceState.userData = action.payload.user;
         console.log('userUdpate', action.payload.user);
+      })
+      .addCase(recoverPassUser.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(recoverPassUser.rejected, (sliceState) => {
+        sliceState.error = 'Error recover user';
+      })
+      .addCase(recoverPassUser.fulfilled, (sliceState, action) => {
+        console.log(action.payload.success);
+      })
+      .addCase(resetPassUser.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(resetPassUser.rejected, (sliceState) => {
+        sliceState.error = 'Error reset user';
+      })
+      .addCase(resetPassUser.fulfilled, (sliceState, action) => {
+        console.log(action.payload.success);
       });
   }
 });
 
-export const { getUserSelector } = profileSlice.selectors;
+export const { getUsername, getAuthStatus } = profileSlice.selectors;
 export default profileSlice.reducer;

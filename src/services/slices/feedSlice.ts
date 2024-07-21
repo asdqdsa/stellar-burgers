@@ -11,12 +11,12 @@ export const fetchFeed = createAsyncThunk<TOrdersData>(
   async (): Promise<TOrdersData> => getFeedsApi()
 );
 
-type TOrderState = {
+type TFeedState = {
   isLoading: boolean;
   error: null | string;
 } & TOrdersData;
 
-const initialState: TOrderState = {
+const initialState: TFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,

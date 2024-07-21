@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   ingredientsSlice: ingredientsSlice,
   feedSlice: feedSlice,
   burgerConstructorSlice: burgerConstructorSlice,
-  profileSlice: profileSlice,
+  profile: profileSlice,
   orderSlice: orderSlice
 });
 
@@ -35,5 +35,6 @@ export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch: () => AppDispatch = () => dispatchHook();
 export const useAppSelector: TypedUseSelectorHook<RootState> = selectorHook;
+export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
 
 export default store;

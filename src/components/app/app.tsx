@@ -19,12 +19,14 @@ import ProtectedRoute from '../protected-route';
 import { fetchIngredients } from '../../services/slices/burgerIngredientsSlice';
 import { useAppDispatch } from '../../services/store';
 import { useEffect } from 'react';
+import { fetchUser } from '../../services/slices/profileSlice';
 
 const App = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
+    dispatch(fetchUser());
     dispatch(fetchIngredients());
   }, [dispatch]);
 

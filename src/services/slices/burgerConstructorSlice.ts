@@ -60,7 +60,10 @@ const burgerConstructorSlice = createSlice({
           (item) => item.id !== action.payload.id
         );
     },
-
+    removeAllIngredients(sliceState) {
+      sliceState.constructorItems.ingredients = [];
+      sliceState.constructorItems.bun = null;
+    },
     moveIngredient(
       sliceState,
       action: PayloadAction<{ index: number; move: number }>
@@ -80,6 +83,10 @@ const burgerConstructorSlice = createSlice({
   }
 });
 
-export const { addIngredient, removeIngredient, moveIngredient } =
-  burgerConstructorSlice.actions;
+export const {
+  addIngredient,
+  removeIngredient,
+  moveIngredient,
+  removeAllIngredients
+} = burgerConstructorSlice.actions;
 export default burgerConstructorSlice.reducer;
