@@ -1,24 +1,6 @@
 import { PayloadAction, createSlice, nanoid } from '@reduxjs/toolkit';
 import { TConstructorIngredient, TIngredient } from '@utils-types';
 
-// export type TIngredient = {
-//   _id: string;
-//   name: string;
-//   type: string;
-//   proteins: number;
-//   fat: number;
-//   carbohydrates: number;
-//   calories: number;
-//   price: number;
-//   image: string;
-//   image_large: string;
-//   image_mobile: string;
-// };
-
-// export type TConstructorIngredient = TIngredient & {
-//   id: string;
-// };
-/** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
 type TBurgerConstructorState = {
   constructorItems: {
     bun: null | TIngredient;
@@ -47,7 +29,6 @@ const burgerConstructorSlice = createSlice({
             sliceState.constructorItems.ingredients.push(action.payload);
         }
       },
-
       prepare: (ingredient) => ({ payload: { ...ingredient, id: nanoid() } })
     },
 
@@ -60,10 +41,12 @@ const burgerConstructorSlice = createSlice({
           (item) => item.id !== action.payload.id
         );
     },
+
     removeAllIngredients(sliceState) {
       sliceState.constructorItems.ingredients = [];
       sliceState.constructorItems.bun = null;
     },
+
     moveIngredient(
       sliceState,
       action: PayloadAction<{ index: number; move: number }>
@@ -80,6 +63,10 @@ const burgerConstructorSlice = createSlice({
         sliceState.constructorItems.ingredients[action.payload.index]
       ];
     }
+  },
+
+  selectors: {
+    getConstructorItems: (sliceState) => sliceState.constructorItems
   }
 });
 
@@ -89,4 +76,5 @@ export const {
   moveIngredient,
   removeAllIngredients
 } = burgerConstructorSlice.actions;
+export const { getConstructorItems } = burgerConstructorSlice.selectors;
 export default burgerConstructorSlice.reducer;

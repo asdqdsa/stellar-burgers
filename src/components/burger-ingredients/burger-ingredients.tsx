@@ -1,55 +1,20 @@
 import { useState, useRef, useEffect, FC } from 'react';
 import { useInView } from 'react-intersection-observer';
-
 import { TIngredient, TTabMode } from '@utils-types';
 import { BurgerIngredientsUI } from '../ui/burger-ingredients';
 import { useAppSelector } from '../../services/store';
+import { getIngredients } from '../../services/slices/burgerIngredientsSlice';
 
 export const BurgerIngredients: FC = () => {
-  /** TODO: взять переменные из стора */
-  // const buns = [
-  //   {
-  //     _id: '643d69a5c3f7b9001cfa093c',
-  //     name: 'Краторная булка N-200i',
-  //     type: 'bun',
-  //     proteins: 80,
-  //     fat: 24,
-  //     carbohydrates: 53,
-  //     calories: 420,
-  //     price: 1255,
-  //     image: 'https://code.s3.yandex.net/react/code/bun-02.png',
-  //     image_mobile: 'https://code.s3.yandex.net/react/code/bun-02-mobile.png',
-  //     image_large: 'https://code.s3.yandex.net/react/code/bun-02-large.png',
-  //     __v: 0
-  //   }
-  // ] as (TIngredient & { __v: number })[];
-  // const buns = [] as TIngredient[];
-  const buns: TIngredient[] = useAppSelector((globalState) =>
-    globalState.ingredientsSlice.ingredients.filter(
-      (item: TIngredient) => item.type === 'bun'
-    )
+  const buns: TIngredient[] = useAppSelector(getIngredients).filter(
+    (item: TIngredient) => item.type === 'bun'
   );
-  const mains: TIngredient[] = useAppSelector((globalState) =>
-    globalState.ingredientsSlice.ingredients.filter(
-      (item: TIngredient) => item.type === 'main'
-    )
+  const mains: TIngredient[] = useAppSelector(getIngredients).filter(
+    (item: TIngredient) => item.type === 'main'
   );
-  const sauces: TIngredient[] = useAppSelector((globalState) =>
-    globalState.ingredientsSlice.ingredients.filter(
-      (item: TIngredient) => item.type === 'sauce'
-    )
+  const sauces: TIngredient[] = useAppSelector(getIngredients).filter(
+    (item: TIngredient) => item.type === 'sauce'
   );
-
-  // const proteins: TIngredient[] = useAppSelector((globalState) =>
-  //   globalState.ingredientsSlice.ingredients.toSorted(
-  //     (item2: TIngredient, item: TIngredient) => item.proteins - item2.proteins
-  //   )
-  // );
-  // console.log(proteins);
-  // const proteins = mains.toSorted(
-  //   (item2: TIngredient, item: TIngredient) => item.proteins - item2.proteins
-  // );
-  // console.log(proteins);
 
   const [currentTab, setCurrentTab] = useState<TTabMode>('bun');
   const titleBunRef = useRef<HTMLHeadingElement>(null);
@@ -87,8 +52,6 @@ export const BurgerIngredients: FC = () => {
     if (tab === 'sauce')
       titleSaucesRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  // return null;
 
   return (
     <BurgerIngredientsUI

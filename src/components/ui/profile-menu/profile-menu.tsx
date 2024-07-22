@@ -29,20 +29,12 @@ export const ProfileMenuUI: FC<ProfileMenuUIProps> = ({
       История заказов
     </NavLink>
 
-    {/* <NavLink
-      to={'/'}
-      replace
-      className={({ isActive }) =>
-        `text text_type_main-medium text_color_inactive pt-4 pb-4 ${styles.button}`
-      }
-    > */}
     <button
       className={`text text_type_main-medium text_color_inactive pt-4 pb-4 ${styles.button}`}
       onClick={handleLogout}
     >
       Выход
     </button>
-    {/* </NavLink> */}
 
     <p className='pt-20 text text_type_main-default text_color_inactive'>
       {pathname === '/profile'

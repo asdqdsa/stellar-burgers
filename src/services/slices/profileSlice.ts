@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
   TAuthResponse,
   TLoginData,
@@ -16,33 +16,16 @@ import { TUserResponse } from '@api';
 import { TUser } from '@utils-types';
 import { deleteCookie, setCookie } from '../../utils/cookie';
 
-// export type TRegisterData = {
-//   email: string;
-//   name: string;
-//   password: string;
-// };
-
-// type TAuthResponse = TServerResponse<{
-//   refreshToken: string;
-//   accessToken: string;
-//   user: TUser;
-// }>;
-
-export const fetchRegisterUser = createAsyncThunk<
-  TAuthResponse,
-  TRegisterData,
-  { rejectValue: string }
->(
+export const fetchRegisterUser = createAsyncThunk<TAuthResponse, TRegisterData>(
   'profile/fetchRegisterUser',
   async (credentials: TRegisterData): Promise<TAuthResponse> =>
     registerUserApi(credentials)
 );
 
-export const fetchUser = createAsyncThunk<
-  TUserResponse,
-  undefined,
-  { rejectValue: string }
->('profile/fetchUser', async (): Promise<TUserResponse> => getUserApi());
+export const fetchUser = createAsyncThunk<TUserResponse, undefined>(
+  'profile/fetchUser',
+  async (): Promise<TUserResponse> => getUserApi()
+);
 
 export const loginUser = createAsyncThunk<TAuthResponse, TLoginData>(
   'profile/userLogin',
@@ -66,8 +49,7 @@ export const userUpdate = createAsyncThunk<
 
 export const recoverPassUser = createAsyncThunk<
   { success: boolean },
-  { email: string },
-  { rejectValue: string }
+  { email: string }
 >(
   'profile/userRecoverPas',
   async ({ email }: { email: string }): Promise<{ success: boolean }> =>
@@ -76,8 +58,7 @@ export const recoverPassUser = createAsyncThunk<
 
 export const resetPassUser = createAsyncThunk<
   { success: boolean },
-  { password: string; token: string },
-  { rejectValue: string }
+  { password: string; token: string }
 >(
   'profile/userResetPass',
   async ({
@@ -120,7 +101,8 @@ const profileSlice = createSlice({
     getUsername: (sliceState: TProfileState): string =>
       sliceState.userData.name,
     getAuthStatus: (sliceState: TProfileState): boolean =>
-      sliceState.isAuthorized
+      sliceState.isAuthorized,
+    getUser: (sliceState: TProfileState): TUser => sliceState.userData
   },
   extraReducers: (builder) => {
     builder
@@ -141,7 +123,6 @@ const profileSlice = createSlice({
         ];
         setCookie('accessToken', sliceState.accessToken);
         localStorage.setItem('refreshToken', sliceState.refreshToken);
-        console.log(action.payload);
       })
       .addCase(fetchUser.pending, (sliceState) => {
         sliceState.isLoading = true;
@@ -154,12 +135,6 @@ const profileSlice = createSlice({
         sliceState.isLoading = false;
         sliceState.isAuthChecked = true;
         sliceState.userData = action.payload.user;
-        // console.log(
-        //   action.payload.success,
-        //   'success?',
-        //   action.payload.user,
-        //   'user?'
-        // );
       })
       .addCase(loginUser.pending, (sliceState) => {
         sliceState.isLoading = true;
@@ -178,7 +153,6 @@ const profileSlice = createSlice({
         ];
         setCookie('accessToken', sliceState.accessToken);
         localStorage.setItem('refreshToken', sliceState.refreshToken);
-        console.log(sliceState.accessToken);
       })
       .addCase(logoutUser.pending, (sliceState) => {
         sliceState.isLoading = true;
@@ -188,11 +162,10 @@ const profileSlice = createSlice({
       .addCase(logoutUser.rejected, (sliceState) => {
         sliceState.error = 'Error loging out';
       })
-      .addCase(logoutUser.fulfilled, (sliceState, action) => {
+      .addCase(logoutUser.fulfilled, (sliceState) => {
         sliceState.isAuthorized = false;
         sliceState.isLoading = false;
         sliceState.userData = { email: '', name: '' };
-        console.log('logout fullfilled');
         localStorage.removeItem('refreshToken');
         deleteCookie('accessToken');
       })
@@ -206,32 +179,12 @@ const profileSlice = createSlice({
       .addCase(userUpdate.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
         sliceState.userData = action.payload.user;
-        console.log('userUdpate', action.payload.user);
-      })
-      .addCase(recoverPassUser.pending, (sliceState) => {
-        sliceState.isLoading = true;
-        sliceState.error = null;
-      })
-      .addCase(recoverPassUser.rejected, (sliceState) => {
-        sliceState.error = 'Error recover user';
-      })
-      .addCase(recoverPassUser.fulfilled, (sliceState, action) => {
-        console.log(action.payload.success);
-      })
-      .addCase(resetPassUser.pending, (sliceState) => {
-        sliceState.isLoading = true;
-        sliceState.error = null;
-      })
-      .addCase(resetPassUser.rejected, (sliceState) => {
-        sliceState.error = 'Error reset user';
-      })
-      .addCase(resetPassUser.fulfilled, (sliceState, action) => {
-        console.log(action.payload.success);
       });
   }
 });
 
 export const {
+  getUser,
   getUsername,
   getAuthStatus,
   isAuthCheckedSelector,

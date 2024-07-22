@@ -11,13 +11,7 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import {
-  Routes,
-  Route,
-  Link,
-  useNavigate,
-  useLocation
-} from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
@@ -104,7 +98,7 @@ const App = () => {
           <Route
             path='/feed/:number'
             element={
-              <Modal title='OrderInfo' onClose={closeModal}>
+              <Modal title='Информация о заказе' onClose={closeModal}>
                 <OrderInfo />
               </Modal>
             }
@@ -114,7 +108,7 @@ const App = () => {
             path='/ingredients/:id'
             element={
               <ProtectedRoute>
-                <Modal title='IngredientsDetails' onClose={closeModal}>
+                <Modal title='Детали ингредиента' onClose={closeModal}>
                   <IngredientDetails />
                 </Modal>
               </ProtectedRoute>
@@ -124,7 +118,7 @@ const App = () => {
           <Route
             path='/profile/orders/:number'
             element={
-              <Modal title='IngredientsDetailsProtected' onClose={closeModal}>
+              <Modal title='Детали ингредиента' onClose={closeModal}>
                 <OrderInfo />
               </Modal>
             }

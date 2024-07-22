@@ -1,5 +1,4 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-// import rootReducer from './rootReducer';
 
 import {
   TypedUseSelectorHook,
@@ -13,28 +12,22 @@ import profileSlice from './slices/profileSlice';
 import orderSlice from './slices/orderSlice';
 
 const rootReducer = combineReducers({
-  ingredientsSlice: ingredientsSlice,
-  feedSlice: feedSlice,
-  burgerConstructorSlice: burgerConstructorSlice,
+  ingredients: ingredientsSlice,
+  feed: feedSlice,
+  burgerConstructor: burgerConstructorSlice,
   profile: profileSlice,
-  orderSlice: orderSlice
+  order: orderSlice
 });
 
 const store = configureStore({
   reducer: rootReducer,
-  // reducer: {
-  //   ingredients: ingredientsSlice
-  // },
   devTools: process.env.NODE_ENV !== 'production'
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
-// export type RootState = ReturnType<typeof store.getState>;
-
 export type AppDispatch = typeof store.dispatch;
 
 export const useAppDispatch: () => AppDispatch = () => dispatchHook();
 export const useAppSelector: TypedUseSelectorHook<RootState> = selectorHook;
-export const useSelector: TypedUseSelectorHook<RootState> = selectorHook;
 
 export default store;

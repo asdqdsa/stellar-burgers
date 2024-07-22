@@ -1,10 +1,5 @@
-import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {
-  getOrdersApi,
-  orderBurgerApi,
-  getOrderByNumberApi,
-  TNewOrderResponse
-} from '@api';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getOrdersApi, orderBurgerApi, TNewOrderResponse } from '@api';
 import { TOrder } from '@utils-types';
 
 export const fetchOrderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
@@ -36,7 +31,7 @@ const initialState: TOrderState = {
 };
 
 const orderSlice = createSlice({
-  name: 'orderSlice',
+  name: 'order',
   initialState,
   reducers: {
     closeModalOrder: (sliceState) => {
@@ -47,12 +42,10 @@ const orderSlice = createSlice({
     }
   },
   selectors: {
-    getOrderRequest: (sliceState: TOrderState): boolean =>
-      sliceState.orderRequest,
-    getOrderData: (sliceState: TOrderState): TOrder | null =>
-      sliceState.orderData,
-    getOrderModalData: (sliceState: TOrderState): TOrder | null =>
-      sliceState.orderModalData
+    getOrderRequest: (sliceState) => sliceState.orderRequest,
+    getOrderData: (sliceState) => sliceState.orderData,
+    getOrderModalData: (sliceState) => sliceState.orderModalData,
+    getOrdersByUser: (sliceState) => sliceState.ordersByUser
   },
   extraReducers: (builder) => {
     builder
@@ -86,7 +79,11 @@ const orderSlice = createSlice({
   }
 });
 
-export const { getOrderRequest, getOrderData, getOrderModalData } =
-  orderSlice.selectors;
+export const {
+  getOrderRequest,
+  getOrderData,
+  getOrderModalData,
+  getOrdersByUser
+} = orderSlice.selectors;
 export const { closeModalOrder, removeItemsConstructor } = orderSlice.actions;
 export default orderSlice.reducer;

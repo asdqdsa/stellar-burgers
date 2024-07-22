@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { LoginUI } from '@ui-pages';
 import { useAppDispatch, useAppSelector } from '../../services/store';
-import { loginUser } from '../../services/slices/profileSlice';
+import { getAuthStatus, loginUser } from '../../services/slices/profileSlice';
 import { useNavigate } from 'react-router-dom';
 
 export const Login: FC = () => {
@@ -9,13 +9,10 @@ export const Login: FC = () => {
   const [password, setPassword] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuthorized = useAppSelector(
-    (globalState) => globalState.profile.isAuthorized
-  );
+  const isAuthorized = useAppSelector(getAuthStatus);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log('press login', email, password);
     dispatch(loginUser({ email, password }));
   };
 

@@ -2,10 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFeedsApi } from '@api';
 import { TOrdersData } from '@utils-types';
 
-//await fetch(
-//   'https://norma.nomoreparties.space/api/orders/all'
-// );
-
 export const fetchFeed = createAsyncThunk<TOrdersData>(
   'feed/fetchFeed',
   async (): Promise<TOrdersData> => getFeedsApi()
@@ -28,7 +24,10 @@ const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {},
-  selectors: {},
+  selectors: {
+    getFeed: (sliceState) => sliceState,
+    getFeedOrders: (sliceState) => sliceState.orders
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchFeed.pending, (sliceState) => {
@@ -37,7 +36,7 @@ const feedSlice = createSlice({
       })
       .addCase(fetchFeed.rejected, (sliceState) => {
         sliceState.isLoading = false;
-        sliceState.error = 'Error';
+        sliceState.error = 'Error fetching feed';
       })
       .addCase(fetchFeed.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
@@ -49,4 +48,5 @@ const feedSlice = createSlice({
   }
 });
 
+export const { getFeed, getFeedOrders } = feedSlice.selectors;
 export default feedSlice.reducer;

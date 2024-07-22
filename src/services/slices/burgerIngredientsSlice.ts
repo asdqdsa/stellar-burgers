@@ -2,37 +2,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getIngredientsApi } from '@api';
 import { TIngredient } from '@utils-types';
 
-export const fetchIngredients = createAsyncThunk<
-  TIngredient[],
-  undefined,
-  { rejectValue: string }
->('burgerIngredients/fetchIngredients', async function (): Promise<
-  TIngredient[]
-> {
-  // const response = await fetch(
-  //   'https://norma.nomoreparties.space/api/ingredients'
-  // );
-  // if (!response.ok) rejectWithValue('Error');
-  // const data = await response.json();
-  // console.log(data);
-  // return data;
-  return getIngredientsApi();
-});
+export const fetchIngredients = createAsyncThunk<TIngredient[], undefined>(
+  'burgerIngredients/fetchIngredients',
+  async (): Promise<TIngredient[]> => getIngredientsApi()
+);
 
 export type TIngredientState = {
   ingredients: TIngredient[];
   error: null | string;
   isLoading: boolean;
 };
-
-// https://norma.nomoreparties.space/api/ingredients
-// https://norma.nomoreparties.space/api/orders/all
-// https://norma.nomoreparties.space/api/ingredients
-// https://norma.nomoreparties.space/api/ingredients
-// https://norma.nomoreparties.space/api/ingredients
-//await fetch(
-//   'https://norma.nomoreparties.space/api/orders/all'
-// );
 
 const initialState: TIngredientState = {
   ingredients: [],
@@ -44,7 +23,10 @@ export const ingredientsSlice = createSlice({
   name: 'ingredients',
   initialState,
   reducers: {},
-  selectors: {},
+  selectors: {
+    getIngredients: (sliceState) => sliceState.ingredients,
+    isLoadingIngredients: (sliceState) => sliceState.isLoading
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchIngredients.pending, (sliceState) => {
@@ -62,4 +44,6 @@ export const ingredientsSlice = createSlice({
   }
 });
 
+export const { getIngredients, isLoadingIngredients } =
+  ingredientsSlice.selectors;
 export default ingredientsSlice.reducer;

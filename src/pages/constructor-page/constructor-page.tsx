@@ -6,14 +6,14 @@ import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 
-import { fetchIngredients } from '../../services/slices/burgerIngredientsSlice';
+import {
+  fetchIngredients,
+  isLoadingIngredients
+} from '../../services/slices/burgerIngredientsSlice';
 
 export const ConstructorPage: FC = () => {
-  /** TODO: взять переменную из стора */
-  // const isIngredientsLoading = false;
-  const isIngredientsLoading = useAppSelector(
-    (globalState) => globalState.ingredientsSlice.isLoading
-  );
+  const isIngredientsLoading = useAppSelector(isLoadingIngredients);
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(fetchIngredients());

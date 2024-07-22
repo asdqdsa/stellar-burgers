@@ -2,26 +2,14 @@ import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import {
   fetchUser,
-  getUsername,
+  getUser,
   userUpdate
 } from '../../services/slices/profileSlice';
 import { useAppDispatch, useAppSelector } from '../../services/store';
-import { useSelector } from 'react-redux';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  // const user = {
-  //   name: useAppSelector(
-  //     (globalState) => globalState.profileSlice.userData.name
-  //   ),
-  //   email: 'emailll'
-  // };
-  const user = useAppSelector((globalState) => globalState.profile.userData);
+  const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
-  // console.log(user, 'userr');
-  // const isLoaded = useAppSelector(
-  //   (globalState) => globalState.profile.isLoading
-  // );
 
   const [formValue, setFormValue] = useState({
     name: user.name,
@@ -50,7 +38,6 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log('save data profile', formValue);
     dispatch(userUpdate(formValue));
   };
 
