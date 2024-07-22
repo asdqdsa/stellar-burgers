@@ -96,6 +96,7 @@ export type TProfileState = {
   isAuthorized: boolean;
   accessToken: string;
   refreshToken: string;
+  isAuthChecked: boolean;
 };
 
 const initialState: TProfileState = {
@@ -104,7 +105,8 @@ const initialState: TProfileState = {
   isLoading: false,
   isAuthorized: false,
   accessToken: '',
-  refreshToken: ''
+  refreshToken: '',
+  isAuthChecked: false
 };
 
 const profileSlice = createSlice({
@@ -112,6 +114,9 @@ const profileSlice = createSlice({
   initialState,
   reducers: {},
   selectors: {
+    isAuthCheckedSelector: (sliceState: TProfileState): boolean =>
+      sliceState.isAuthChecked,
+    userDataSelector: (sliceState: TProfileState): TUser => sliceState.userData,
     getUsername: (sliceState: TProfileState): string =>
       sliceState.userData.name,
     getAuthStatus: (sliceState: TProfileState): boolean =>
@@ -124,7 +129,7 @@ const profileSlice = createSlice({
         sliceState.error = null;
       })
       .addCase(fetchRegisterUser.rejected, (sliceState) => {
-        sliceState.error = 'Error';
+        sliceState.error = 'Error register user';
       })
       .addCase(fetchRegisterUser.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
@@ -143,24 +148,25 @@ const profileSlice = createSlice({
         sliceState.error = null;
       })
       .addCase(fetchUser.rejected, (sliceState) => {
-        sliceState.error = 'Error';
+        sliceState.error = 'Error fetch user';
       })
       .addCase(fetchUser.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
+        sliceState.isAuthChecked = true;
         sliceState.userData = action.payload.user;
-        console.log(
-          action.payload.success,
-          'success?',
-          action.payload.user,
-          'user?'
-        );
+        // console.log(
+        //   action.payload.success,
+        //   'success?',
+        //   action.payload.user,
+        //   'user?'
+        // );
       })
       .addCase(loginUser.pending, (sliceState) => {
         sliceState.isLoading = true;
         sliceState.error = null;
       })
       .addCase(loginUser.rejected, (sliceState) => {
-        sliceState.error = 'Error login';
+        sliceState.error = 'Error loging in';
       })
       .addCase(loginUser.fulfilled, (sliceState, action) => {
         sliceState.userData = action.payload.user;
@@ -180,11 +186,12 @@ const profileSlice = createSlice({
         sliceState.error = null;
       })
       .addCase(logoutUser.rejected, (sliceState) => {
-        sliceState.error = 'Error login';
+        sliceState.error = 'Error loging out';
       })
       .addCase(logoutUser.fulfilled, (sliceState, action) => {
-        sliceState.isAuthorized = !action.payload.success;
+        sliceState.isAuthorized = false;
         sliceState.isLoading = false;
+        sliceState.userData = { email: '', name: '' };
         console.log('logout fullfilled');
         localStorage.removeItem('refreshToken');
         deleteCookie('accessToken');
@@ -224,5 +231,10 @@ const profileSlice = createSlice({
   }
 });
 
-export const { getUsername, getAuthStatus } = profileSlice.selectors;
+export const {
+  getUsername,
+  getAuthStatus,
+  isAuthCheckedSelector,
+  userDataSelector
+} = profileSlice.selectors;
 export default profileSlice.reducer;

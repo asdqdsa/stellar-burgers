@@ -18,10 +18,10 @@ export const Profile: FC = () => {
   // };
   const user = useAppSelector((globalState) => globalState.profile.userData);
   const dispatch = useAppDispatch();
-  console.log(user, 'userr');
-  const isLoaded = useAppSelector(
-    (globalState) => globalState.profile.isLoading
-  );
+  // console.log(user, 'userr');
+  // const isLoaded = useAppSelector(
+  //   (globalState) => globalState.profile.isLoading
+  // );
 
   const [formValue, setFormValue] = useState({
     name: user.name,

@@ -11,7 +11,13 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import {
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useLocation
+} from 'react-router-dom';
 
 import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
@@ -24,6 +30,8 @@ import { fetchUser } from '../../services/slices/profileSlice';
 const App = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const backgroundLocation = location.state?.background;
 
   useEffect(() => {
     dispatch(fetchUser());
@@ -36,7 +44,7 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader />
 
-      <Routes>
+      <Routes location={backgroundLocation || location}>
         <Route path='*' element={<NotFound404 />} />
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
@@ -44,7 +52,7 @@ const App = () => {
         <Route
           path='/login'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute unAuthed>
               <Login />
             </ProtectedRoute>
           }
@@ -52,7 +60,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute unAuthed>
               <Register />
             </ProtectedRoute>
           }
@@ -60,7 +68,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute unAuthed>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -68,7 +76,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute unAuthed>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -91,38 +99,38 @@ const App = () => {
         />
       </Routes>
 
-      <Routes>
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal title='OrderInfo' onClose={closeModal}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-      </Routes>
-
-      <Routes>
-        <Route
-          path='/ingredients/:id'
-          element={
-            <ProtectedRoute>
-              <Modal title='IngredientsDetails' onClose={closeModal}>
-                <IngredientDetails />
+      {backgroundLocation && (
+        <Routes>
+          <Route
+            path='/feed/:number'
+            element={
+              <Modal title='OrderInfo' onClose={closeModal}>
+                <OrderInfo />
               </Modal>
-            </ProtectedRoute>
-          }
-        />
+            }
+          />
 
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <Modal title='IngredientsDetailsProtected' onClose={closeModal}>
-              <OrderInfo />
-            </Modal>
-          }
-        />
-      </Routes>
+          <Route
+            path='/ingredients/:id'
+            element={
+              <ProtectedRoute>
+                <Modal title='IngredientsDetails' onClose={closeModal}>
+                  <IngredientDetails />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <Modal title='IngredientsDetailsProtected' onClose={closeModal}>
+                <OrderInfo />
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };
