@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getOrdersApi, orderBurgerApi, TNewOrderResponse } from '@api';
+import {
+  getOrderByNumberApi,
+  getOrdersApi,
+  orderBurgerApi,
+  TNewOrderResponse,
+  TOrderResponse
+} from '@api';
 import { TOrder } from '@utils-types';
 
 export const fetchOrderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
@@ -10,6 +16,12 @@ export const fetchOrderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
 export const fetchOrdersUser = createAsyncThunk<TOrder[], undefined>(
   'order/fetchOrdersUser',
   async (): Promise<TOrder[]> => getOrdersApi()
+);
+
+export const fetchOrderByNumber = createAsyncThunk<TOrderResponse, number>(
+  'order/fetchOrderByNumber',
+  async (orderNumber: number): Promise<TOrderResponse> =>
+    getOrderByNumberApi(orderNumber)
 );
 
 type TOrderState = {
@@ -75,6 +87,19 @@ const orderSlice = createSlice({
       .addCase(fetchOrdersUser.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
         sliceState.ordersByUser = action.payload;
+      })
+      .addCase(fetchOrderByNumber.pending, (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addCase(fetchOrderByNumber.rejected, (sliceState) => {
+        sliceState.error = 'Error profile order';
+      })
+      .addCase(fetchOrderByNumber.fulfilled, (sliceState, action) => {
+        sliceState.isLoading = false;
+        sliceState.error = null;
+        // console.log(action.payload.orders);
+        sliceState.orderData = action.payload.orders[0];
       });
   }
 });

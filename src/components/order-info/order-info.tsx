@@ -6,17 +6,21 @@ import { TIngredient } from '@utils-types';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchFeed, getFeedOrders } from '../../services/slices/feedSlice';
 import { getIngredients } from '../../services/slices/burgerIngredientsSlice';
+import {
+  fetchOrderByNumber,
+  getOrderData
+} from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   const paramsOrder = useParams();
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(fetchFeed());
+    dispatch(fetchOrderByNumber(+paramsOrder.number!));
   }, [dispatch]);
 
-  const orderData = useAppSelector(getFeedOrders).find(
-    (order) => order.number === +paramsOrder.number!
-  );
+  const orderData = useAppSelector(getOrderData);
   const ingredients: TIngredient[] = useAppSelector(getIngredients);
 
   /* Готовим данные для отображения */
