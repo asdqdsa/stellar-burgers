@@ -3,9 +3,17 @@ import { useNavigate } from 'react-router-dom';
 
 import { forgotPasswordApi } from '@api';
 import { ForgotPasswordUI } from '@ui-pages';
+import { useForm } from '../../hooks/useForm';
 
 export const ForgotPassword: FC = () => {
-  const [email, setEmail] = useState('');
+  const { values, handleChange, setValues } = useForm({
+    email: ''
+  });
+
+  const { email } = values as {
+    email: string;
+  };
+
   const [error, setError] = useState<Error | null>(null);
 
   const navigate = useNavigate();
@@ -26,7 +34,7 @@ export const ForgotPassword: FC = () => {
     <ForgotPasswordUI
       errorText={error?.message}
       email={email}
-      setEmail={setEmail}
+      handleChange={handleChange}
       handleSubmit={handleSubmit}
     />
   );

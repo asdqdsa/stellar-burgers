@@ -7,6 +7,10 @@ import {
   TOrderResponse
 } from '@api';
 import { TOrder } from '@utils-types';
+import {
+  isActionPending,
+  isActionRejected
+} from '../../utils/actionTypeMatcher';
 
 export const fetchOrderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
   'order/fetchOrderBurger',
@@ -61,12 +65,9 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrderBurger.pending, (sliceState) => {
-        sliceState.isLoading = true;
-        sliceState.error = null;
         sliceState.orderRequest = true;
       })
       .addCase(fetchOrderBurger.rejected, (sliceState) => {
-        sliceState.error = 'Error order';
         sliceState.orderRequest = false;
       })
       .addCase(fetchOrderBurger.fulfilled, (sliceState, action) => {
@@ -76,28 +77,22 @@ const orderSlice = createSlice({
         sliceState.orderData = action.payload.order;
         sliceState.orderModalData = action.payload.order;
       })
-      .addCase(fetchOrdersUser.pending, (sliceState) => {
-        sliceState.isLoading = true;
-        sliceState.error = null;
-      })
-      .addCase(fetchOrdersUser.rejected, (sliceState) => {
-        sliceState.error = 'Error order';
-      })
       .addCase(fetchOrdersUser.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
         sliceState.ordersByUser = action.payload;
-      })
-      .addCase(fetchOrderByNumber.pending, (sliceState) => {
-        sliceState.isLoading = true;
-        sliceState.error = null;
-      })
-      .addCase(fetchOrderByNumber.rejected, (sliceState) => {
-        sliceState.error = 'Error profile order';
       })
       .addCase(fetchOrderByNumber.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
         sliceState.error = null;
         sliceState.orderData = action.payload.orders[0];
+      })
+      .addMatcher(isActionPending(), (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addMatcher(isActionRejected(), (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = 'Error order';
       });
   }
 });

@@ -9,7 +9,7 @@ import {
   getOrderModalData
 } from '../../services/slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
-import { fetchUser, getAuthStatus } from '../../services/slices/profileSlice';
+import { getAuthStatus } from '../../services/slices/profileSlice';
 import {
   getConstructorItems,
   removeAllIngredients
@@ -22,10 +22,6 @@ export const BurgerConstructor: FC = () => {
   const constructorItems = useAppSelector(getConstructorItems);
   const orderRequest = useAppSelector(getOrderRequest);
   const orderModalData = useAppSelector(getOrderModalData);
-
-  useEffect(() => {
-    dispatch(fetchUser());
-  }, [dispatch]);
 
   const onOrderClick = () => {
     if (!constructorItems.bun || orderRequest) return;

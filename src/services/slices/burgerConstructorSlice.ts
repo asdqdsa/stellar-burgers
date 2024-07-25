@@ -64,7 +64,6 @@ const burgerConstructorSlice = createSlice({
       ];
     }
   },
-
   selectors: {
     getConstructorItems: (sliceState) => sliceState.constructorItems
   }

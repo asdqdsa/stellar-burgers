@@ -1,6 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getFeedsApi } from '@api';
 import { TOrdersData } from '@utils-types';
+import {
+  isActionPending,
+  isActionRejected
+} from '../../utils/actionTypeMatcher';
 
 export const fetchFeed = createAsyncThunk<TOrdersData>(
   'feed/fetchFeed',
@@ -30,20 +34,20 @@ const feedSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFeed.pending, (sliceState) => {
-        sliceState.isLoading = true;
-        sliceState.error = null;
-      })
-      .addCase(fetchFeed.rejected, (sliceState) => {
-        sliceState.isLoading = false;
-        sliceState.error = 'Error fetching feed';
-      })
       .addCase(fetchFeed.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
         sliceState.error = null;
         sliceState.orders = action.payload.orders;
         sliceState.totalToday = action.payload.totalToday;
         sliceState.total = action.payload.total;
+      })
+      .addMatcher(isActionPending(), (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = null;
+      })
+      .addMatcher(isActionRejected(), (sliceState) => {
+        sliceState.isLoading = true;
+        sliceState.error = 'Error fetching feed';
       });
   }
 });
