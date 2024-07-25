@@ -97,8 +97,8 @@ const profileSlice = createSlice({
         sliceState.isLoading = true;
         sliceState.error = null;
       })
-      .addCase(fetchUser.rejected, (sliceState) => {
-        sliceState.error = 'Error fetch user';
+      .addCase(fetchUser.rejected, (sliceState, action) => {
+        sliceState.error = action.error.message || 'Error fetching user.';
       })
       .addCase(fetchUser.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;

@@ -19,6 +19,7 @@ import ProtectedRoute from '../protected-route';
 import { fetchIngredients } from '../../services/slices/burgerIngredientsSlice';
 import { useAppDispatch } from '../../services/store';
 import { useEffect } from 'react';
+import { fetchUser } from '../../services/slices/profileSlice';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -27,6 +28,9 @@ const App = () => {
   const backgroundLocation = location.state?.background;
 
   useEffect(() => {
+    dispatch(fetchUser())
+      .unwrap()
+      .catch((error) => console.error(error.message));
     dispatch(fetchIngredients());
   }, [dispatch]);
 
