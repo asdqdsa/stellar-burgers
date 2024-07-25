@@ -4,7 +4,7 @@ import { TOrdersData } from '@utils-types';
 
 export const fetchFeed = createAsyncThunk<TOrdersData>(
   'feed/fetchFeed',
-  async (): Promise<TOrdersData> => getFeedsApi()
+  getFeedsApi
 );
 
 type TFeedState = {

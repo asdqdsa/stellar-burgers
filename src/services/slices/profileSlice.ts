@@ -4,12 +4,10 @@ import {
   TLoginData,
   TRegisterData,
   TServerResponse,
-  forgotPasswordApi,
   getUserApi,
   loginUserApi,
   logoutApi,
   registerUserApi,
-  resetPasswordApi,
   updateUserApi
 } from '@api';
 import { TUserResponse } from '@api';
@@ -18,57 +16,28 @@ import { deleteCookie, setCookie } from '../../utils/cookie';
 
 export const fetchRegisterUser = createAsyncThunk<TAuthResponse, TRegisterData>(
   'profile/fetchRegisterUser',
-  async (credentials: TRegisterData): Promise<TAuthResponse> =>
-    registerUserApi(credentials)
+  registerUserApi
 );
 
 export const fetchUser = createAsyncThunk<TUserResponse, undefined>(
   'profile/fetchUser',
-  async (): Promise<TUserResponse> => getUserApi()
+  getUserApi
 );
 
 export const loginUser = createAsyncThunk<TAuthResponse, TLoginData>(
   'profile/userLogin',
-  async (credentials: TLoginData): Promise<TAuthResponse> =>
-    loginUserApi(credentials)
+  loginUserApi
 );
 
 export const logoutUser = createAsyncThunk<TServerResponse<{}>, undefined>(
   'profile/userLogout',
-  async (): Promise<TServerResponse<{}>> => logoutApi()
+  logoutApi
 );
 
 export const userUpdate = createAsyncThunk<
   TUserResponse,
   Partial<TRegisterData>
->(
-  'profile/userUpdate',
-  async (credentials: Partial<TRegisterData>): Promise<TUserResponse> =>
-    updateUserApi(credentials)
-);
-
-export const recoverPassUser = createAsyncThunk<
-  { success: boolean },
-  { email: string }
->(
-  'profile/userRecoverPas',
-  async ({ email }: { email: string }): Promise<{ success: boolean }> =>
-    forgotPasswordApi({ email })
-);
-
-export const resetPassUser = createAsyncThunk<
-  { success: boolean },
-  { password: string; token: string }
->(
-  'profile/userResetPass',
-  async ({
-    password,
-    token
-  }: {
-    password: string;
-    token: string;
-  }): Promise<{ success: boolean }> => resetPasswordApi({ password, token })
-);
+>('profile/userUpdate', updateUserApi);
 
 export type TProfileState = {
   userData: TUser;

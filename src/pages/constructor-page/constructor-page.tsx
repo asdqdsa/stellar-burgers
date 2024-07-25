@@ -3,21 +3,13 @@ import styles from './constructor-page.module.css';
 import { BurgerIngredients } from '../../components';
 import { BurgerConstructor } from '../../components';
 import { Preloader } from '../../components/ui';
-import { FC, useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../services/store';
+import { FC } from 'react';
+import { useAppSelector } from '../../services/store';
 
-import {
-  fetchIngredients,
-  isLoadingIngredients
-} from '../../services/slices/burgerIngredientsSlice';
+import { isLoadingIngredients } from '../../services/slices/burgerIngredientsSlice';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useAppSelector(isLoadingIngredients);
-
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
 
   return (
     <>

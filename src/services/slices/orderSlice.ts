@@ -10,18 +10,17 @@ import { TOrder } from '@utils-types';
 
 export const fetchOrderBurger = createAsyncThunk<TNewOrderResponse, string[]>(
   'order/fetchOrderBurger',
-  async (order: string[]): Promise<TNewOrderResponse> => orderBurgerApi(order)
+  orderBurgerApi
 );
 
 export const fetchOrdersUser = createAsyncThunk<TOrder[], undefined>(
   'order/fetchOrdersUser',
-  async (): Promise<TOrder[]> => getOrdersApi()
+  getOrdersApi
 );
 
 export const fetchOrderByNumber = createAsyncThunk<TOrderResponse, number>(
   'order/fetchOrderByNumber',
-  async (orderNumber: number): Promise<TOrderResponse> =>
-    getOrderByNumberApi(orderNumber)
+  getOrderByNumberApi
 );
 
 type TOrderState = {
@@ -98,7 +97,6 @@ const orderSlice = createSlice({
       .addCase(fetchOrderByNumber.fulfilled, (sliceState, action) => {
         sliceState.isLoading = false;
         sliceState.error = null;
-        // console.log(action.payload.orders);
         sliceState.orderData = action.payload.orders[0];
       });
   }
