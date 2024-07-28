@@ -1,13 +1,33 @@
-import { FC, SyntheticEvent, useState } from 'react';
+import { FC, SyntheticEvent, useEffect } from 'react';
 import { RegisterUI } from '@ui-pages';
+import { useAppDispatch } from '../../services/store';
+import {
+  fetchRegisterUser,
+  fetchUser
+} from '../../services/slices/profileSlice';
+import { useForm } from '../../hooks/useForm';
 
 export const Register: FC = () => {
-  const [userName, setUserName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { values, handleChange, setValues } = useForm({
+    email: '',
+    password: '',
+    userName: ''
+  });
+
+  const { email, password, userName } = values as {
+    email: string;
+    password: string;
+    userName: string;
+  };
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(fetchUser());
+  }, [dispatch]);
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    dispatch(fetchRegisterUser({ email, password, name: userName }));
   };
 
   return (
@@ -16,9 +36,7 @@ export const Register: FC = () => {
       email={email}
       userName={userName}
       password={password}
-      setEmail={setEmail}
-      setPassword={setPassword}
-      setUserName={setUserName}
+      handleChange={handleChange}
       handleSubmit={handleSubmit}
     />
   );
