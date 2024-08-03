@@ -17,9 +17,9 @@ import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import { Feed } from '@pages';
 import ProtectedRoute from '../protected-route';
 import { fetchIngredients } from '../../services/slices/burgerIngredientsSlice';
-import { useAppDispatch } from '../../services/store';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { useEffect } from 'react';
-import { fetchUser } from '../../services/slices/profileSlice';
+import { fetchUser, setAuthed } from '../../services/slices/profileSlice';
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -30,7 +30,8 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchUser())
       .unwrap()
-      .catch((error) => console.error(error.message));
+      .catch((error) => console.error(error.message))
+      .finally(() => dispatch(setAuthed()));
     dispatch(fetchIngredients());
   }, [dispatch]);
 

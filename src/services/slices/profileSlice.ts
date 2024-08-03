@@ -62,7 +62,11 @@ const initialState: TProfileState = {
 const profileSlice = createSlice({
   name: 'profile',
   initialState,
-  reducers: {},
+  reducers: {
+    setAuthed: (sliceSate) => {
+      sliceSate.isAuthorized = true;
+    }
+  },
   selectors: {
     isAuthCheckedSelector: (sliceState: TProfileState): boolean =>
       sliceState.isAuthChecked,
@@ -159,4 +163,5 @@ export const {
   isAuthCheckedSelector,
   userDataSelector
 } = profileSlice.selectors;
+export const { setAuthed } = profileSlice.actions;
 export default profileSlice.reducer;

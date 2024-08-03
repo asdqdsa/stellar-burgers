@@ -20,7 +20,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
 }) => (
   <section className={styles.burger_constructor}>
     {constructorItems.bun ? (
-      <div className={`${styles.element} mb-4 mr-4`} data-cy={`burger-bun-top`}>
+      <div className={`${styles.element} mb-4 mr-4`} data-cy='burger-bun-top'>
         <ConstructorElement
           type='top'
           isLocked
@@ -76,7 +76,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
         Выберите булки
       </div>
     )}
-    <div className={`${styles.total} mt-10 mr-4`}>
+    <div className={`${styles.total} mt-10 mr-4`} data-cy='burger-create-order'>
       <div className={`${styles.cost} mr-10`}>
         <p
           className={`text ${styles.text} mr-2`}
