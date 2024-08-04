@@ -1,9 +1,9 @@
-import { rootReducer } from './store';
-import ingredientsSlice from './slices/burgerIngredientsSlice';
-import feedSlice from './slices/feedSlice';
-import burgerConstructorSlice from './slices/burgerConstructorSlice';
-import profileSlice from './slices/profileSlice';
-import orderSlice from './slices/orderSlice';
+import { rootReducer } from '../store';
+import ingredientsSlice from '../slices/burgerIngredientsSlice';
+import feedSlice from '../slices/feedSlice';
+import burgerConstructorSlice from '../slices/burgerConstructorSlice';
+import profileSlice from '../slices/profileSlice';
+import orderSlice from '../slices/orderSlice';
 
 describe('Init store/rootReducer', () => {
   it('checks correct initial state for each slice', () => {

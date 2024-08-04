@@ -4,15 +4,15 @@ import {
   removeAllIngredients,
   moveIngredient,
   type TBurgerConstructorState
-} from './burgerConstructorSlice';
-import burgerConstructorSlice from './burgerConstructorSlice';
+} from '../slices/burgerConstructorSlice';
+import burgerConstructorSlice from '../slices/burgerConstructorSlice';
 import {
   ingredientTypeBun,
   ingredientTypeMain,
   ingredientTypeSouce
-} from '../__test__/ingredientsMockData';
+} from '../__mocks__/ingredientsData';
 
-describe('Burger constructor functionality', () => {
+describe('Burger constructor state functionality', () => {
   const initialState = {
     constructorItems: { bun: null, ingredients: [] }
   } as TBurgerConstructorState;
