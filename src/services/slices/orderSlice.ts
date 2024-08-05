@@ -27,7 +27,7 @@ export const fetchOrderByNumber = createAsyncThunk<TOrderResponse, number>(
   getOrderByNumberApi
 );
 
-type TOrderState = {
+export type TOrderState = {
   orderRequest: boolean;
   orderData: TOrder | null;
   orderModalData: TOrder | null;

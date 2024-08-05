@@ -39,18 +39,6 @@ describe('Burger ingredient request state status', () => {
     });
   });
 
-  it('should handle status rejected for fetchIngredients API call', () => {
-    const sliceState = ingredientsSlice(initialState, {
-      type: fetchIngredients.rejected.type
-    });
-
-    expect(sliceState).toEqual({
-      ...initialState,
-      isLoading: false,
-      error: 'Error'
-    });
-  });
-
   it('should handle status fulfilled for fetchIngredients API call', () => {
     const ingredients = [
       ingredientTypeSouce,

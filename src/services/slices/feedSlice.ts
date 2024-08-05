@@ -11,7 +11,7 @@ export const fetchFeed = createAsyncThunk<TOrdersData>(
   getFeedsApi
 );
 
-type TFeedState = {
+export type TFeedState = {
   isLoading: boolean;
   error: null | string;
 } & TOrdersData;
