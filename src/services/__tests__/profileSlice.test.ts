@@ -7,25 +7,12 @@ import profileSlice, {
   loginUser,
   logoutUser,
   userUpdate,
-  type TProfileState
+  initialState
 } from '../slices/profileSlice';
 import { userAuthData } from '../__mocks__/userAuthData';
 import { userRegisterData } from '../__mocks__/userRegisterData';
 
 describe('Profile/user requests state status', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  const initialState = {
-    userData: { email: '', name: '' },
-    error: null,
-    isLoading: false,
-    isAuthorized: false,
-    accessToken: '',
-    refreshToken: '',
-    isAuthChecked: false
-  } as TProfileState;
-
   // RegisterUser
   it('should handle status fulfilled for fetchRegisterUser', () => {
     const { refreshToken, accessToken, user } = userAuthData;

@@ -8,30 +8,33 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-// declare global {
-//   namespace Cypress {
-//     interface Chainable {
-//       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-//     }
-//   }
-// }
+declare global {
+  namespace Cypress {
+    interface Chainable<Subject = any> {
+      clickElementWith(_options: { el: string; text: string }): Chainable<void>;
+      openCloseModal(_options: {
+        el: string;
+        text: string;
+        modal: string;
+        closeModalEl: string;
+        isForce?: boolean;
+      }): Chainable<void>;
+    }
+  }
+}
+
+Cypress.Commands.add('clickElementWith', ({ el, text }) => {
+  cy.get(el).contains(text).click();
+});
+
+Cypress.Commands.add(
+  'openCloseModal',
+  ({ el, text, modal, closeModalEl, isForce = false }) => {
+    cy.clickElementWith({ el, text });
+    cy.get(modal).should('exist');
+    cy.get(closeModalEl).click({ force: isForce });
+    cy.get(modal).should('not.exist');
+  }
+);
+
+export {};

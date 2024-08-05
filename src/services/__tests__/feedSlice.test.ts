@@ -1,16 +1,8 @@
 import { feedData } from '../__mocks__/feedData';
 
-import feedSlice, { type TFeedState, fetchFeed } from '../slices/feedSlice';
+import feedSlice, { fetchFeed, initialState } from '../slices/feedSlice';
 
 describe('Feed orders request state status', () => {
-  const initialState = {
-    orders: [],
-    total: 0,
-    totalToday: 0,
-    isLoading: true,
-    error: null
-  } as TFeedState;
-
   it('should handle status pending for fetchFeed API call', () => {
     const sliceState = feedSlice(initialState, {
       type: fetchFeed.pending.type

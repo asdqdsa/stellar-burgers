@@ -36,7 +36,7 @@ export type TOrderState = {
   ordersByUser: TOrder[];
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderRequest: false,
   orderData: null,
   orderModalData: null,

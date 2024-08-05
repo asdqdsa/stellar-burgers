@@ -4,17 +4,11 @@ import {
   ingredientTypeSouce
 } from '../__mocks__/ingredientsData';
 import ingredientsSlice, {
-  type TIngredientState,
-  fetchIngredients
+  fetchIngredients,
+  initialState
 } from '../slices/burgerIngredientsSlice';
 
 describe('Burger ingredient request state status', () => {
-  const initialState = {
-    ingredients: [],
-    error: null,
-    isLoading: false
-  } as TIngredientState;
-
   it('should handle status pending for fetchIngredients API call', () => {
     const sliceState = ingredientsSlice(initialState, {
       type: fetchIngredients.pending.type

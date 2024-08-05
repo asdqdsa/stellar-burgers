@@ -1,3 +1,7 @@
+import '../support/commands';
+const burgerIngredient = '[data-cy="burger-ingredient"]';
+const modal = '[data-cy="burger-modal"]';
+
 describe('E2E atomic cases', function () {
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', {
@@ -6,9 +10,9 @@ describe('E2E atomic cases', function () {
 
     cy.visit('');
   });
+
   it('Should say "Соберите бургер"', function () {
-    const titleContainer = cy.get(`[data-cy=main-title]`);
-    titleContainer.contains('Соберите бургер');
+    cy.get(`[data-cy=main-title]`).contains('Соберите бургер');
   });
 
   it('Add two buns to the list', function () {
@@ -18,26 +22,30 @@ describe('E2E atomic cases', function () {
 
   it('Add main ingredients', function () {
     cy.get('[data-cy="burger-main"]').contains('Добавить').click();
-    cy.get('[data-cy="burger-ingredient"]').contains('котлета').should('exist');
+    cy.get(burgerIngredient).contains('котлета').should('exist');
   });
 
   it('Add souce ingredients', function () {
     cy.get('[data-cy="burger-souce"]').contains('Добавить').click();
-    cy.get('[data-cy="burger-ingredient"]').contains('Соус').should('exist');
+    cy.get(burgerIngredient).contains('Соус').should('exist');
   });
 
-  it('Open/close-btn modal popup with an ingredient', function () {
-    cy.get('[data-cy="burger-ingredient-card"]').contains('булк').click();
-    cy.get('[data-cy="burger-modal"]').should('exist');
-    cy.get('[data-cy="modal-overlay"]').click({ force: true });
-    cy.get('[data-cy="burger-modal"]').should('not.exist');
-  });
+  describe('Open/Close popup with ingredient', () => {
+    const options = {
+      el: '[data-cy="burger-ingredient-card"]',
+      text: 'булк',
+      modal,
+      closeModalEl: '[data-cy="modal-overlay"]',
+      isForce: true
+    };
 
-  it('Open/close-overlay modal popup with an ingredient', function () {
-    cy.get('[data-cy="burger-ingredient-card"]').contains('булк').click();
-    cy.get('[data-cy="burger-modal"]').should('exist');
-    cy.get('[data-cy=modal-close-btn]').click();
-    cy.get('[data-cy="burger-modal"]').should('not.exist');
+    it('Open & close by pressing button', function () {
+      cy.openCloseModal(options);
+    });
+
+    it('Open & close by clicking overlay', function () {
+      cy.openCloseModal(options);
+    });
   });
 });
 
@@ -85,17 +93,13 @@ describe('Creating order user case', function () {
         ]
       });
 
-    cy.get('[data-cy="burger-modal"]').contains('777').should('exist');
+    cy.get(modal).as('modal').contains('777').should('exist');
     cy.get('[data-cy=modal-close-btn]').click();
-    cy.get('[data-cy="burger-modal"]').should('not.exist');
+    cy.get('@modal').should('not.exist');
 
     cy.get(`[data-cy="burger-bun-top"]`).should('not.exist');
     cy.get(`[data-cy="burger-bun-bottom"]`).should('not.exist');
-    cy.get('[data-cy="burger-ingredient"]')
-      .contains('котлета')
-      .should('not.exist');
-    cy.get('[data-cy="burger-ingredient"]')
-      .contains('Соус')
-      .should('not.exist');
+    cy.get(burgerIngredient).contains('котлета').should('not.exist');
+    cy.get(burgerIngredient).contains('Соус').should('not.exist');
   });
 });

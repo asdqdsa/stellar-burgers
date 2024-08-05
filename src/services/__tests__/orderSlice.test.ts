@@ -1,24 +1,15 @@
 import { orderMockData } from '../__mocks__/orderMockData';
 import orderSlice, {
-  type TOrderState,
   removeItemsConstructor,
   fetchOrderBurger,
   fetchOrdersUser,
-  fetchOrderByNumber
+  fetchOrderByNumber,
+  initialState
 } from '../slices/orderSlice';
 import { ordersByUserData } from '../__mocks__/orderByUser';
 import { orderByNumber } from '../__mocks__/orderbyNumber';
 
 describe('Order slice functionality & request state status', () => {
-  const initialState = {
-    orderRequest: false,
-    orderData: null,
-    orderModalData: null,
-    ordersByUser: [],
-    error: null,
-    isLoading: false
-  } as TOrderState;
-
   it('should handle status fulfilled for fetchOrderBurger API call', () => {
     const orderData = orderMockData.order;
     const sliceState = orderSlice(initialState, {

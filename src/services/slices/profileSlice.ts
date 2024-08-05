@@ -49,7 +49,7 @@ export type TProfileState = {
   isAuthChecked: boolean;
 };
 
-const initialState: TProfileState = {
+export const initialState: TProfileState = {
   userData: { email: '', name: '' },
   error: null,
   isLoading: false,

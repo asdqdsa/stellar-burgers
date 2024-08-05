@@ -3,7 +3,8 @@ import {
   removeIngredient,
   removeAllIngredients,
   moveIngredient,
-  type TBurgerConstructorState
+  type TBurgerConstructorState,
+  initialState
 } from '../slices/burgerConstructorSlice';
 import burgerConstructorSlice from '../slices/burgerConstructorSlice';
 import {
@@ -13,10 +14,6 @@ import {
 } from '../__mocks__/ingredientsData';
 
 describe('Burger constructor state functionality', () => {
-  const initialState = {
-    constructorItems: { bun: null, ingredients: [] }
-  } as TBurgerConstructorState;
-
   it('should add outter ingredient type bun', () => {
     const ingredient = ingredientTypeBun;
     const sliceState = burgerConstructorSlice(
