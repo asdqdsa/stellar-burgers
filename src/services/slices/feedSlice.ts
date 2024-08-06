@@ -11,12 +11,12 @@ export const fetchFeed = createAsyncThunk<TOrdersData>(
   getFeedsApi
 );
 
-type TFeedState = {
+export type TFeedState = {
   isLoading: boolean;
   error: null | string;
 } & TOrdersData;
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
   orders: [],
   total: 0,
   totalToday: 0,

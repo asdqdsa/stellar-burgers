@@ -18,6 +18,7 @@ export const ConstructorPage: FC = () => {
       ) : (
         <main className={styles.containerMain}>
           <h1
+            data-cy={`main-title`}
             className={`${styles.title} text text_type_main-large mt-10 mb-5 pl-5`}
           >
             Соберите бургер

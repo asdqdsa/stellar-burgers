@@ -27,7 +27,7 @@ export const fetchOrderByNumber = createAsyncThunk<TOrderResponse, number>(
   getOrderByNumberApi
 );
 
-type TOrderState = {
+export type TOrderState = {
   orderRequest: boolean;
   orderData: TOrder | null;
   orderModalData: TOrder | null;
@@ -36,7 +36,7 @@ type TOrderState = {
   ordersByUser: TOrder[];
 };
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
   orderRequest: false,
   orderData: null,
   orderModalData: null,
